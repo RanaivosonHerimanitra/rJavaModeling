@@ -34,7 +34,7 @@ public class Sites {
 	public ArrayList<String[]> readLocalData() throws IOException
 	{
 		//should read in database
-		CSVReader conn = new CSVReader(filepathSite,",");
+		CSVReader conn = new CSVReader(filepathSite,",",true);
 		ArrayList<String[]> mydata = conn.readCSV();
 		return mydata;
 	}
