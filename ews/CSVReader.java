@@ -183,7 +183,7 @@ public class CSVReader {
      //Main
      public static void main(String[] args) throws IOException 
      {
-    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest2.csv";
+    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest3.csv";
     	 CSVReader csv= new CSVReader(csvFile,",",true);
     	 
     	 //checkNoHeader(csv);

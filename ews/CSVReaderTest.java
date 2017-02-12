@@ -21,17 +21,11 @@ public class CSVReaderTest {
 	}
 
 	@Test
-	//public void test() {
-	//	fail("Not yet implemented");
-	//}
-	
-	// Sur PaluConfTest0
-	//count number of columns that are null or empty
-	public void testNoHeader() throws IOException
+	//count number of columns that are null or empty in case where user says no header:
+	public void testNoHeader() throws IOException 
 	{
 			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest0.csv";
 			CSVReader csv= new CSVReader(csvFile,",",false);
-			//csv.checkMalFormedHeaders();
 			ArrayList<String[]> mycsv= csv.readCSV();
 			int ncol = csv.getNumberCols();
 			int colNull = 0;
@@ -48,7 +42,7 @@ public class CSVReaderTest {
 					 colNull!=ncol);
 	}
 		
-	// Sur PaluConfTest1:
+	// 
 	@Test
 	public void testMalFormedHeader() throws IOException
 	{
@@ -57,7 +51,6 @@ public class CSVReaderTest {
 		{
 			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest"+u+".csv";
 			CSVReader csv= new CSVReader(csvFile,",",true);
-			//csv.checkMalFormedHeaders();
 			ArrayList<String[]> mycsv= csv.readCSV();
 			int Ncol = csv.getNumberCols();
 			for (int k=0; k<Ncol ; k++)
@@ -72,4 +65,5 @@ public class CSVReaderTest {
 	    	 }	
 		}
 	}
+	//le fichier n'existe pas:
 }
