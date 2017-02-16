@@ -2,9 +2,11 @@
  * Created by Herimanitra R.,
  * Originally taken here : 
  * https://www.mkyong.com/java/how-to-read-and-parse-csv-file-in-java/
+ * read any csv file and output mean of convertible variables on the screen
  */
 package ews;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,14 +20,27 @@ public class CSVReader {
      boolean hasHeader;
      private final ArrayList<String[]> mydata = new ArrayList<>();
      private int nrow;
-     
+     private boolean empty=false;
      //constructor init main vars: complete path and sep
      public CSVReader (String mycsvFile,String separator, boolean val)
      {
     	 csvFile=mycsvFile;
     	 cvsSplitBy=separator;
     	 hasHeader=val;
+    	 File f = new File(csvFile);
+    	 if(!f.exists()) { 
+    	     System.out.println("Le fichier n\'existe pas");
+    	     empty=true;
+    	     System.exit(1);
+    	 }
      }
+     
+     //index to monitor if the file doesnt exist:
+     public boolean getEmpty()
+     {
+    	 return empty;
+     }
+     
      //get size of dataset:
      public int getNumberLines() throws IOException
      {
@@ -116,8 +131,6 @@ public class CSVReader {
     			 {
     				setColumnName(col,"col"+colNull);
     				colNull +=1;
-    				//System.out.println("Le fichier doit contenir des noms de variables et ne doivent pas contenir des caracteres speciaux");
-    				//System.exit(1);
     			 }
     		 }
     	 }    	
@@ -183,7 +196,7 @@ public class CSVReader {
      //Main
      public static void main(String[] args) throws IOException 
      {
-    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest3.csv";
+    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest5.csv";
     	 CSVReader csv= new CSVReader(csvFile,",",true);
     	 
     	 //checkNoHeader(csv);

@@ -1,3 +1,7 @@
+/*
+ * Diseases.java
+ * 
+ */
 package ews;
 
 public class Diseases {
