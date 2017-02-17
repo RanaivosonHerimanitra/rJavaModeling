@@ -1,16 +1,20 @@
 /*
  * A disease has an evolution of cases number for a given geographical site.
+ * TODO: refactor every arrays (single) to a LinkList: 
+ * http://beginnersbook.com/2013/12/linkedlist-in-java-with-example/
  */
+
 package ews;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.math3.random.EmpiricalDistribution;
+//import org.apache.commons.math3.random.EmpiricalDistribution;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 public class Sites {
@@ -22,10 +26,10 @@ public class Sites {
 	CSVReader csv ;
 	ArrayList<String[]> mycsv ;
 	// a constructor for the site
-	public  Sites () throws IOException
+	public  Sites (String path) throws IOException
 	{
-		filepathSite ="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConf.csv";
-		sitesList = new String [54];
+		setFilePath(path);
+		//sitesList = new String [54];
 		//should read in database
 		csv = new CSVReader(filepathSite,",",true);
 		mycsv = csv.readCSV();
@@ -38,6 +42,10 @@ public class Sites {
 	public void setRank(double rk)
 	{
 		rank=rk;
+	}
+	public void setFilePath(String val)
+	{
+		filepathSite=val;
 	}
 	// methods:
 	// by default, return status for the current week :
@@ -107,18 +115,28 @@ public class Sites {
 	{
 		return siteId;
 	}
-	// get list of all sites
-	public String [] getSitesList()
+	// get list of all sites in alert and by week
+	public LinkedHashMap<String, String[] > getHistoricalStatus() throws IOException
 	{
+		LinkedHashMap<String, String[] > sitesList = new LinkedHashMap<String, String[] >();
+		//get all siteId first:
+		int Ncol = csv.getNumberCols();
+		String[] myvalues;
+		String mycols;
+		//get all status second:
+		for ( int k =0; k<Ncol; k++)
+		{
+			myvalues=csv.getColumnValues(k);
+			mycols = csv.getNameOf(myvalues);
+			if ( !mycols.equals("deb_sem") && !mycols.equals("code") )
+			{
+				sitesList.put(mycols, getAlertStatusFor(mycols,90) );
+			}	
+		}
+		//return a LinkedHashMap:
 		return sitesList;
 	}
-//	public ArrayList<String[]> readLocalData() throws IOException
-//	{
-//		//should read in database
-//		CSVReader conn = new CSVReader(filepathSite,",",true);
-//		ArrayList<String[]> mydata = conn.readCSV();
-//		return mydata;
-//	}
+
 	public String [] getMonitoredDiseases(String id) 
 	{
 		//read somewhere and return
@@ -170,33 +188,13 @@ public class Sites {
 		double[] myvector = (double[]) getVector(siteId,true);	
 		double percentile = new Percentile().evaluate(myvector, rank);
 		//EmpiricalDistribution distribution = new EmpiricalDistribution(myvector.length);
-	    //distribution.load(myvector);
+	   // distribution.load(myvector);
 	    //double percentile = distribution.cumulativeProbability(4);
 	    return percentile;
-	}
-	public double [] getWeeklyNbCasesData(String id, String idDisease)
-	{
-		double [] z = {1.,2.}; //should read somewhere in a db/file?!!
-		return z;
-	}
-	
-	public void loadSiteData(String id, String idDisease,boolean partial) 
-	{
-		//load data here using db:
 	}
 	public double [] propSitesAlert()
 	{
 		double [] z = {1.,2.}; //should read somewhere in a db/file?!!
 		return z;
 	}
-	//see implementation on the console:
-//	public static void main(String[] args) throws IOException
-//	{
-//		Sites site = new Sites();
-//		ArrayList<String[]> mydata= site.readLocalData();
-//		for (int k=0; k<mydata.size(); k++)
-//		{
-//			System.out.println(mydata.get(k));
-//		}
-//	}
 }

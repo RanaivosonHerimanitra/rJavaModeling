@@ -6,10 +6,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 /*
- * on peut mettre plusieurs test case 
- * a l'interieur de ({}) avec un virgule
+ * Suites de test
  */
-@SuiteClasses({ CSVReaderTest.class })
+@SuiteClasses({ CSVReaderTest.class,CSVReaderSitesTest.class })
 public class AllTests {
 
 }
