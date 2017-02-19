@@ -8,7 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 /*
  * Suites de test
  */
-@SuiteClasses({ CSVReaderTest.class,CSVReaderSitesTest.class })
+@SuiteClasses({ CSVReaderTest.class,CSVReaderSitesTest.class})
 public class AllTests {
 
 }

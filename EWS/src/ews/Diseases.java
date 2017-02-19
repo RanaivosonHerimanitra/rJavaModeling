@@ -4,62 +4,54 @@
  */
 package ews;
 
+import java.util.ArrayList;
+
 public class Diseases {
-    private String filepathDisease;
-	private String diseaseId;
-	private String [] sitesConcerned;
-	private String [] diseasesList;
-	
-	// a constructor for Disease
-	public  Diseases()
-	{
-		setDiseaseId("malaria");
-		setFilepathDisease("/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data");
-		setDiseasesList(new String[3]);
-		//Then should loop and fill
-		sitesConcerned = new String[54];
-	}
-	//return all sites concerned by a given disease
-	public String [] getSitesConcerned (String diseaseId)
-	{
-		return sitesConcerned;
-	}
-	public double [] numberOfCases (String idDisease) 
-	{
-		
-		double [] z = {1.,2.}; //should read somewhere in a db/file?
-		return z;
-	}
-	public void loadData(String id, boolean partial) 
-	{
-		//load data here using db:
-	}
-	public double [] getHistoricalAlerts(String idDisease)
-	{
-		double [] z = {1.,2.}; //should read somewhere in a db/file?
-		return z;
-	}
-	public double [] getHistoricalPercrankVal(String idDisease)
-	{
-		double [] z = {1.,2.}; //should read somewhere in a db/file?
-		return z;
-	}
-	public String getFilepathDisease() {
-		return filepathDisease;
-	}
-	public void setFilepathDisease(String filepathDisease) {
-		this.filepathDisease = filepathDisease;
-	}
-	public String getDiseaseId() {
-		return diseaseId;
-	}
-	public void setDiseaseId(String diseaseId) {
-		this.diseaseId = diseaseId;
-	}
-	public String [] getDiseasesList() {
-		return diseasesList;
-	}
-	public void setDiseasesList(String [] diseasesList) {
-		this.diseasesList = diseasesList;
-	}
+	private ArrayList<String> alertStatus = new ArrayList<>();
+	private ArrayList<String> pastValues = new ArrayList<>();
+	private ArrayList<String> sites = new ArrayList<>();
+	private ArrayList<String> alertWeek= new ArrayList<>();
+	private ArrayList<Double> nbCases= new ArrayList<>();
+    public Diseases ()
+    {
+    	
+    }
+    public void addNbCases(double val)
+    {
+    	nbCases.add(val);
+    }
+    public void addAlertStatus(String val)
+    {
+    	alertStatus.add(val);
+    }
+    public void addWeek(String val)
+    {
+    	alertWeek.add(val);
+    }
+    public void addPastValues(String val)
+    {
+    	pastValues.add(val);
+    }
+    public void addSites(String val)
+    {
+    	sites.add(val);
+    }
+    //getters:
+    public ArrayList<String> getAlertStatus()
+    {
+    	return alertStatus;
+    }
+   
+    public ArrayList<String> getSites()
+    {
+    	return sites;
+    }
+    public ArrayList<String> getAlertWeek()
+    {
+    	return alertWeek;
+    }
+    public ArrayList<Double> getNbCases()
+    {
+    	return nbCases;
+    }
 }

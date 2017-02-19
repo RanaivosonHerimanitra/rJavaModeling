@@ -19,9 +19,6 @@ public class CSVReaderTest {
 
 	@Before
 	public void setUp()  {
-		//ne doit pas prendre de parametres!!
-		//csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest" + i +".csv";
-		//csv= new CSVReader(csvFile,",",false);
 	}
 
 	@After

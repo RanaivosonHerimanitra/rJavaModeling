@@ -1,6 +1,6 @@
 /*
  * A disease has an evolution of cases number for a given geographical site.
- * TODO: refactor every arrays (single) to a LinkList: 
+ * TODO: refactor every arrays (single) to a LinkList ou Vector??: 
  * http://beginnersbook.com/2013/12/linkedlist-in-java-with-example/
  */
 
@@ -8,20 +8,20 @@ package ews;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+
 import java.util.LinkedHashMap;
-import java.util.List;
+
 
 import org.apache.commons.lang3.ArrayUtils;
 //import org.apache.commons.math3.random.EmpiricalDistribution;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
-public class Sites {
+public class Sites  {
+	Diseases disease = new Diseases();
 	private String filepathSite;
 	private String siteId;
 	private String [] monitoredDiseases;
-	private String [] sitesList;
+	LinkedHashMap<String, String[] > sitesList = new LinkedHashMap<String, String[] >();
 	private double rank;
 	CSVReader csv ;
 	ArrayList<String[]> mycsv ;
@@ -33,6 +33,7 @@ public class Sites {
 		//should read in database
 		csv = new CSVReader(filepathSite,",",true);
 		mycsv = csv.readCSV();
+		rank=90;
 	}
 	//
 	public void setSiteId(String str)
@@ -49,36 +50,49 @@ public class Sites {
 	}
 	// methods:
 	// by default, return status for the current week :
-	public String[] getAlertStatusFor(String id, double rk) throws IOException
+	public void getAlertStatusFor(String id, double rk) throws IOException
 	{
+	
 		setSiteId(id);
 		setRank(rk);
 		double [] myvector = (double[]) getVector(siteId,true);
+		String  [] myweek = (String[]) getVector("code",false);
 		ArrayUtils.reverse(myvector);
+		ArrayUtils.reverse(myweek);
 		String [] myalert = new String[myvector.length];
-		double valueAtPercRank= getPercentileValueAt(rank,siteId);
+		double valueAtPercRank= 0;
 		//loop and if < valueAtPercRank then normal otherwise in alert:
-		myalert[0]="";
-		myalert[1]="";
-		myalert[2]="";
-		for (int i =0 ; i< (myvector.length-3);i++)
+		myalert[0]="normal";
+		myalert[1]="normal";
+		myalert[2]="normal";
+		for (int i =3 ; i< myvector.length;i++)
 		{
-			double [] temp = {myvector[i],myvector[i+1],myvector[i+2]};
-			List<Double> myLastThreeValues= Arrays.asList( ArrayUtils.toObject(temp));
-			double maxThreeValues= (double) Collections.max(myLastThreeValues);
-			if (  maxThreeValues>= valueAtPercRank)
+			valueAtPercRank= getPercentileValueAt(rank,siteId,myweek[i]);
+			boolean anormal =  ( (myvector[i-1] -valueAtPercRank) >=0.00001) &&  ( (myvector[i-2] -valueAtPercRank) >=0.00001) &&  ( (myvector[i-3] -valueAtPercRank) >=0.00001);
+			if ( anormal)
 			{
-				myalert[i+2]="alert";
+				myalert[i]="alert";
+				//System.out.println(myweek[i]+" est en alerte car "+ myvector[i-1] +","+myvector[i-2]+","+myvector[i-3]+" ont depasse le 90th perc:"+valueAtPercRank);
+				disease.addAlertStatus("alert");
+				disease.addPastValues(myvector[i-1] +"-"+myvector[i-2]+"-"+myvector[i-3]);
+				disease.addSites(siteId);
+				disease.addWeek(myweek[i]);
+				disease.addNbCases(myvector[i]);
 			} else {
-				myalert[i+2]="normal";
+				myalert[i]="normal";
+				disease.addAlertStatus("normal");
+				disease.addPastValues(myvector[i-1] +"-"+myvector[i-2]+"-"+myvector[i-3]);
+				disease.addSites(siteId);
+				disease.addWeek(myweek[i]);
+				disease.addNbCases(myvector[i]);
 			}
 		}
 		//then reverse:
-		ArrayUtils.reverse(myalert);
-		return myalert;
+		//ArrayUtils.reverse(myalert);
+		//return myalert;
 	}
 	//return index of a given week
-	public int searchIndex(String colname,String val)
+	public int searchIndex(String colname,String val) throws IOException
 	{
 		int myindex=-1;
 		String[] myweeks= (String[]) getVector(colname,false);
@@ -93,49 +107,13 @@ public class Sites {
 		return myindex;
 	}
 	
-	//should be of the form: "YYYY_WW"
-	public String[] getAlertStatusForWeek(String wk) throws IOException
-	{
-		String[] myalert  = getAlertStatusFor(siteId,rank);
-		int myindex = searchIndex("code",wk);
-		System.out.println("INDEX OF CODE " + myindex);
-		System.out.println("LENGTH OF ALERTS " + myalert.length);
-		//init the array to be returned using myindex:
-		String[] myalert2 = new String[myalert.length-myindex+1];
-		int k=0;
-		System.out.println("LENGTH OF ALERTS2 " + myalert2.length);
-		for ( int i=myindex; i<myalert2.length ;i++)
-		{
-			myalert2[k]=myalert[i];
-			k++;
-		}
-		return myalert2;
-	}
+	
 	public String getSiteId ()
 	{
 		return siteId;
 	}
 	// get list of all sites in alert and by week
-	public LinkedHashMap<String, String[] > getHistoricalStatus() throws IOException
-	{
-		LinkedHashMap<String, String[] > sitesList = new LinkedHashMap<String, String[] >();
-		//get all siteId first:
-		int Ncol = csv.getNumberCols();
-		String[] myvalues;
-		String mycols;
-		//get all status second:
-		for ( int k =0; k<Ncol; k++)
-		{
-			myvalues=csv.getColumnValues(k);
-			mycols = csv.getNameOf(myvalues);
-			if ( !mycols.equals("deb_sem") && !mycols.equals("code") )
-			{
-				sitesList.put(mycols, getAlertStatusFor(mycols,90) );
-			}	
-		}
-		//return a LinkedHashMap:
-		return sitesList;
-	}
+	
 
 	public String [] getMonitoredDiseases(String id) 
 	{
@@ -144,11 +122,14 @@ public class Sites {
 	}
 	
 	//get double vector corresponding to a column name:
-	public Object getVector (String siteId,boolean convert)
+	public Object getVector (String siteId,boolean convert) throws IOException
 	{
+		CSVReader csv= new CSVReader(filepathSite,",",true);
+   	    ArrayList<String[]> mycsv= csv.readCSV();
 		//loop thru all index and search for siteId:
 				String [] mycolumn = mycsv.get(0);
 		   	    String colName = csv.getNameOf(mycolumn);
+		   	    //System.out.println("you re getting col: "+colName);
 		   	    double[] myvector = new double[mycolumn.length-1];
 		   	    if ( !colName.equals(siteId) )
 		   	    {
@@ -183,18 +164,43 @@ public class Sites {
 			  return mycolumn;
 		  }
 	}
-	public double getPercentileValueAt(double rank,String siteId) throws IOException
+	public double getPercentileValueAt(double rank,String siteId,String wk) throws IOException
 	{	
+		//System.out.println("searching for: " + wk);
 		double[] myvector = (double[]) getVector(siteId,true);	
-		double percentile = new Percentile().evaluate(myvector, rank);
+		String[] myweek = (String[]) getVector("code",false);
+		
+		//get index of the supplied code week:
+		int index_wk=-1;
+		for ( int k=0; k<myweek.length;k++)
+		{
+			//System.out.println("myweek[k]="+myweek[k]);
+			if ( myweek[k].equals(wk) )
+			{
+				index_wk=k;
+				break;
+			}
+		}
+		// get vector:
+		int u=0;
+		double[]  myvector_sliced = new double[myweek.length - index_wk +1] ;
+		for (int k=index_wk;k<myweek.length-1;k++)
+		{
+			//System.out.println("k: " + k + ",myweeklength-1: " +(myweek.length-1 ));
+			myvector_sliced[u] = myvector[k];
+			u++;
+		}
+		double percentile = new Percentile().evaluate(myvector_sliced, rank);
 		//EmpiricalDistribution distribution = new EmpiricalDistribution(myvector.length);
-	   // distribution.load(myvector);
+	    // distribution.load(myvector);
 	    //double percentile = distribution.cumulativeProbability(4);
 	    return percentile;
 	}
-	public double [] propSitesAlert()
+	//return static about a given disease
+	//especially past alerts and stuff
+	public Diseases getDiseases()
 	{
-		double [] z = {1.,2.}; //should read somewhere in a db/file?!!
-		return z;
+		return disease;
 	}
+	
 }

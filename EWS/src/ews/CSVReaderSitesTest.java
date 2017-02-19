@@ -2,6 +2,7 @@ package ews;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.junit.After;
@@ -23,21 +24,16 @@ public class CSVReaderSitesTest {
 		
 		LinkedList<String> alertObserved  = new LinkedList<String>();
 		LinkedList<String> alertExpected  = new LinkedList<String>();
-		int k=0;
-		
+				
+				
 		//what we expect:
 		alertExpected.add(0,"alert");
-		alertExpected.add(1,"alert");
-		alertExpected.add(2,"alert");
+		alertExpected.add(1,"normal");
+		alertExpected.add(2,"normal");
 		alertExpected.add(3,"normal");
 		alertExpected.add(4,"normal");
 		alertExpected.add(5,"normal");
 		
-		//instantiate and add path of csv file:
-		String path1="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest6.csv";
-		Sites mysite1 = new Sites(path1);
-		double rank1= mysite1.getPercentileValueAt(90,"mae");
-		System.out.println("Le 90ieme percentile commence à partir de: " + rank1);
 				
 		/*
 		 * Case 1, now add 03 consecutive values > rank=42 (90th percentile)
@@ -45,17 +41,17 @@ public class CSVReaderSitesTest {
 		 */
 		String path2="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest6case1.csv";
 		Sites mysite2 = new Sites(path2);
-		double rank2= mysite2.getPercentileValueAt(90,"mae");
-		//get time series for mae:
-		double[] mae2 = (double[]) mysite2.getVector("mae",true);
-		String[] semaine2 = (String[]) mysite2.getVector("code",false);
-		String[] alerts2 = mysite2.getAlertStatusFor("mae", 90);
-		for (int i=1; i<4 ;i++)
+		mysite2.getAlertStatusFor("mae", 90.);
+		Diseases disease = mysite2.getDiseases();
+		ArrayList<String> alerts = disease.getAlertStatus();
+		ArrayList<String> semaine = disease.getAlertWeek();
+		ArrayList<Double> mae = disease.getNbCases();
+		for (int i=mae.size()-1; i>mae.size()-4 ; i--)
 		{
-			System.out.println("Semaine: "+ semaine2[i] + " Nbcases: "+ mae2[i] + ", 90th perc="+ rank2 + ", statut:"+ alerts2[i]);
-			alertObserved.add(k,alerts2[i]);
-			k++;
+			System.out.println("Semaine: "+ semaine.get(i) + " Nbcases: "+ mae.get(i) + ", 90th perc="+ mysite2.getPercentileValueAt(90,"mae",semaine.get(i)) + ", statut:"+ alerts.get(i) );
+			alertObserved.add(alerts.get(i) );
 		}
+		
 		System.out.println("*********************************************");
 				
 		/*
@@ -63,23 +59,21 @@ public class CSVReaderSitesTest {
 		*/
 		String path3="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest6case2.csv";
 		Sites mysite3 = new Sites(path3);
-		double rank3= mysite3.getPercentileValueAt(90,"mae");
-		//get time series for mae:
-		double[] mae3 = (double[]) mysite3.getVector("mae",true);
-		String[] semaine3 = (String[]) mysite3.getVector("code",false);
-		String[] alerts3 = mysite3.getAlertStatusFor("mae", 90);
-			
-		for (int i=1; i<4 ;i++)
+		mysite3.getAlertStatusFor("mae", 90.);
+		Diseases disease3 = mysite3.getDiseases();
+		ArrayList<String> alerts3 = disease3.getAlertStatus();
+		ArrayList<String> semaine3 = disease3.getAlertWeek();
+		ArrayList<Double> mae3 = disease3.getNbCases();
+		for (int i=mae3.size()-1 ; i>mae3.size()-4; i--)
 		{
-			System.out.println("Semaine: "+ semaine3[i] + " Nbcases: "+ mae3[i] + ", 90th perc="+ rank3 + ", statut:"+ alerts3[i]);
-			alertObserved.add(k,alerts3[i]);
-			k++;
+			System.out.println("Semaine: "+ semaine3.get(i) + " Nbcases: "+ mae3.get(i) + ", 90th perc="+ mysite3.getPercentileValueAt(90,"mae",semaine.get(i)) + ", statut:"+ alerts3.get(i) );
+			alertObserved.add(alerts3.get(i) );		
 		}
 		System.out.println("*********************************************");
 		
+		//expected vs actuals!
 		for (int u=0; u<alertObserved.size(); u++)
-		{
-			//expected vs actuals!
+		{	
 			assertEquals(alertExpected.get(u) , alertObserved.get(u) );
 		}
 	}

@@ -80,7 +80,7 @@ public class CSVReader {
      {
     	 return hasHeader;
      }
-     //get columns by index:
+     //get columns by index: Otran misy bug?
      public String[] getColumnValues (int index)
      {
     	 return mydata.get(index);
@@ -149,7 +149,7 @@ public class CSVReader {
              int n = getNumberLines();
              //count number of cols:
              int col = getNumberCols();
-             System.out.println("Nbcol: "+col+" Nb line: "+n);
+             //System.out.println("Nbcol: "+col+" Nb line: "+n);
              //if no header is said , prepare to generate one
              int colVal=0;
              String[] column = null;
@@ -196,7 +196,7 @@ public class CSVReader {
      //Main
      public static void main(String[] args) throws IOException 
      {
-    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest5.csv";
+    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest7.csv";
     	 CSVReader csv= new CSVReader(csvFile,",",true);
     	 
     	 //checkNoHeader(csv);
@@ -206,7 +206,7 @@ public class CSVReader {
     	 {
     		 String [] mycolumn = mycsv.get(k);
         	 String colName = csv.getNameOf(mycolumn);
-        	 System.out.println(colName);
+        	// System.out.println(colName);
         	 double mymean = csv.meanOf(mycolumn);
         	 System.out.println("La moyenne de la colonne "+ colName + " est " + mymean );
     	 }
