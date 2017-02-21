@@ -6,9 +6,16 @@
  */
 package ews;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -242,22 +249,11 @@ public class CSVReader {
              }
              
      }
-     //Main
-     public static void main(String[] args) throws IOException 
-     {
-    	 csvFile="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest7.csv";
-    	 CSVReader csv= new CSVReader(csvFile,",",true);
-    	 
-    	 //checkNoHeader(csv);
-    	 ArrayList<String[]> mycsv= csv.readCSV();
-    	 int Ncol = csv.getNumberCols();
-    	 for (int k=2; k<Ncol ; k++)
-    	 {
-    		 String [] mycolumn = mycsv.get(k);
-        	 String colName = csv.getNameOf(mycolumn);
-        	// System.out.println(colName);
-        	 double mymean = csv.meanOf(mycolumn);
-        	 System.out.println("La moyenne de la colonne "+ colName + " est " + mymean );
-    	 }
-     }
+     
+	
+	//Main
+    public static void main(String[] args) throws IOException 
+    {
+    	
+    }
 }
