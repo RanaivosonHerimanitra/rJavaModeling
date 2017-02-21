@@ -1,5 +1,5 @@
 /*
- * Unit tests with JUnit, RANAIVOSON Herimanitra
+ * Unit tests with JUnit, RANAIVOSON Herimanitra PIF 6005
  */
 package ews;
 
@@ -7,16 +7,12 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class CSVReaderTest {
 	
-	
-	
-
 	@Before
 	public void setUp()  {
 	}
@@ -26,7 +22,10 @@ public class CSVReaderTest {
 	}
 
 	@Test
-	//count number of columns that are null or empty in case where user says no header:
+	/*
+	 * count number of columns that are null or empty 
+	 * in case where user says no header:
+	 */
 	public void testNoHeader() throws Exception 
 	{
 			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest0.csv";
@@ -44,14 +43,14 @@ public class CSVReaderTest {
 				 } 
 	    	 }
 			System.out.println("Ncol: "+ncol+" colNull: "+colNull);
-			assertTrue("La premiere ligne du fichier doit contenir les noms de variables",
+			assertTrue("Ligne 1 du fichier doit contenir les noms de variables",
 					 colNull!=ncol);
-			//on peut aussi faire ca:
-			//assertFalse("fdfdfd",colNull==ncol);
-			//assertEquals("fsfsf",colNull, ncol);
 	}
 		
-	// 
+	/*
+	 * Tests si les noms de colonnes
+	 * contiennent des caract. speciaux
+	 */
 	@Test
 	public void testMalFormedHeader() throws Exception
 	{
@@ -75,7 +74,11 @@ public class CSVReaderTest {
 	    	}	
 		}
 	}
-	//le fichier n'existe pas:
+	
+	
+	/*
+	 * Test au cas où le fichier n'existe pas:
+	 */
 	@Test
 	public void testNoFichier () throws Exception
 	{

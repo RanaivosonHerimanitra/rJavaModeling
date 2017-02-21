@@ -28,10 +28,10 @@ public class CSVReader {
     	 cvsSplitBy=separator;
     	 hasHeader=val;
     	 File f = new File(csvFile);
-    	 if(!f.exists()) { 
-    	     System.out.println("Le fichier n\'existe pas");
+    	 if( !f.exists() || (csvFile.equals("")) || (cvsSplitBy.equals("" )) ) { 
+    	     System.out.println("Le fichier n\'existe pas, les parametres ne doivent pas etre vides");
     	     empty=true;
-    	     System.exit(1);
+    	     //System.exit(1);
     	 }
      }
      
@@ -44,15 +44,21 @@ public class CSVReader {
      //get size of dataset:
      public int getNumberLines() throws IOException
      {
-    	 BufferedReader b1 = new BufferedReader(new FileReader(csvFile));
-    	 int n=0;
-         while ((line = b1.readLine()) != null) 
-         {
-        	 n++;
-         }
-         b1.close();
-         nrow=n;
-         return nrow;
+    	 if (empty)
+    	 {
+    		 return 0;
+    	 } else {
+    		 BufferedReader b1 = new BufferedReader(new FileReader(csvFile));
+        	 int n=0;
+             while ((line = b1.readLine()) != null) 
+             {
+            	 n++;
+             }
+             b1.close();
+             nrow=n;
+             return nrow;
+    	 }
+    	 
      }
      public void setNumberLines(int myrow)
      {
@@ -61,19 +67,25 @@ public class CSVReader {
      // get # of columns in a csv file:
      public int getNumberCols() throws IOException
      {
-    	 BufferedReader b2 = new BufferedReader(new FileReader(csvFile));
-         int maxCol=0;
-         String sCurrentLine="";
-         while ((sCurrentLine = b2.readLine()) != null) 
-         {
-        	 //collect max index col where value exists
-        	 //this will be the number of column
-             if (sCurrentLine.split(cvsSplitBy).length>maxCol) {
-            	 maxCol= sCurrentLine.split(cvsSplitBy).length;
+    	 if (!empty)
+    	 {
+    		 BufferedReader b2 = new BufferedReader(new FileReader(csvFile));
+             int maxCol=0;
+             String sCurrentLine="";
+             while ((sCurrentLine = b2.readLine()) != null) 
+             {
+            	 //collect max index col where value exists
+            	 //this will be the number of column
+                 if (sCurrentLine.split(cvsSplitBy).length>maxCol) {
+                	 maxCol= sCurrentLine.split(cvsSplitBy).length;
+                 }
              }
-         }
-         b2.close();
-         return maxCol;
+             b2.close();
+             return maxCol;
+    	 } else {
+    		 return 0;
+    	 }
+    	 
      }
      //boolean val to indicate if it has header:
      public boolean hasHeader ()
@@ -83,17 +95,37 @@ public class CSVReader {
      //get columns by index: Otran misy bug?
      public String[] getColumnValues (int index)
      {
-    	 return mydata.get(index);
+    	 if ( empty )
+    	 {
+    		 return null;
+    	 } else {
+    		 return mydata.get(index);
+    	 }
      }  
+     //mutateur:
      public void setColumnName(int index, String val)
      {
-    	 String[] mystr = getColumnValues(index);
-    	 for ( int i=0;i<mystr.length;i++ )
-    	 {
-    		 System.out.println(mystr[i]);
+    	 if (!empty)
+    	 { 
+    		 String[] mystr = getColumnValues(index);
+        	 for ( int i=0;i<mystr.length;i++ )
+             {
+            	System.out.println(mystr[i]);
+             }
+             mydata.get(index)[0]= val; 
     	 }
-    	mydata.get(index)[0]= val;
      }
+     //test if It can be converted to double:
+     public boolean isDouble( String input ) 
+     {
+    	   try {
+    	        Double.parseDouble( input );
+    	        return true;
+    	    }
+    	    catch( Exception e ) {
+    	        return false;
+    	    }
+    }
      //calculate mean of a convertible String array:
      public double meanOf ( String[] val )
      {
@@ -106,7 +138,13 @@ public class CSVReader {
     		 {
     			 N -= 1;
     		 } else {
-    			 sum += Double.parseDouble(val[i]);
+    			 if ( isDouble(val[i]) )
+    			 {
+    				 sum += Double.parseDouble(val[i]);
+    			 } else {
+    				 sum =0;
+    			 }
+    			   
     		 }
     	 }
     	 return sum/N;
@@ -139,7 +177,12 @@ public class CSVReader {
      // get name of column by its index:
      public String getNameOf (String[] val)
      {
-    	 return val[0];
+    	 if (empty)
+    	 {
+    		 return null;
+    	 } else {
+    		 return val[0]; 
+    	 }
     	 
      }
      
@@ -147,51 +190,57 @@ public class CSVReader {
      {
              //count the number of lines:
              int n = getNumberLines();
-             //count number of cols:
-             int col = getNumberCols();
-             //System.out.println("Nbcol: "+col+" Nb line: "+n);
-             //if no header is said , prepare to generate one
-             int colVal=0;
-             String[] column = null;
-            
-             for (int c=0; c<col; c++)
-        	 {
-            	 br = new BufferedReader(new FileReader(csvFile));
-            	 
-            	 int k=0;
-            	 //si la 1ere ligne = nom de colonnes:
-            	 if (hasHeader)
-    			 {
-            		 column = new String[n]; 
-    			 } else {
-    				 //sinon ET si on est à la premiere ligne
-    				 if (k==0) {
-    					 setNumberLines(n+1);
-                		 column = new String[n+1];
-        				 column[k]="col" + colVal ;
-        				 colVal +=1; 
-        				 k +=1;
-        				 //System.out.println("Column"+c+" index"+k+" "+column[k]);
-    				 } 
-    			 }
-            	 while ( ( line = br.readLine() ) != null)
-                 {
-            		//dealing with null values from c-th column: 
-            		 try {
-            			 String val = line.split(cvsSplitBy)[c];
-            			 column[k]=val; 
-            		 }
-            		 catch( Exception e) {
-            			 column[k] ="" ;
-            		 }
-                	 k++; 
-                 } 
-            	 //chaque variable/colonne represente un element de l'ArrayList
-            	 mydata.add(column);
-        	 }
-        	        
-         checkMalFormedHeaders();
-    	 return mydata; 
+             if (n==0)
+             {
+            	 return null;
+             } else {
+            	//count number of cols:
+                 int col = getNumberCols();
+                 //System.out.println("Nbcol: "+col+" Nb line: "+n);
+                 //if no header is said , prepare to generate one
+                 int colVal=0;
+                 String[] column = null;
+                
+                 for (int c=0; c<col; c++)
+            	 {
+                	 br = new BufferedReader(new FileReader(csvFile));
+                	 
+                	 int k=0;
+                	 //si la 1ere ligne = nom de colonnes:
+                	 if (hasHeader)
+        			 {
+                		 column = new String[n]; 
+        			 } else {
+        				 //sinon ET si on est à la premiere ligne
+        				 if (k==0) {
+        					 setNumberLines(n+1);
+                    		 column = new String[n+1];
+            				 column[k]="col" + colVal ;
+            				 colVal +=1; 
+            				 k +=1;
+            				 //System.out.println("Column"+c+" index"+k+" "+column[k]);
+        				 } 
+        			 }
+                	 while ( ( line = br.readLine() ) != null)
+                     {
+                		//dealing with null values from c-th column: 
+                		 try {
+                			 String val = line.split(cvsSplitBy)[c];
+                			 column[k]=val; 
+                		 }
+                		 catch( Exception e) {
+                			 column[k] ="" ;
+                		 }
+                    	 k++; 
+                     } 
+                	 //chaque variable/colonne represente un element de l'ArrayList
+                	 mydata.add(column);
+            	 }
+            	        
+             checkMalFormedHeaders();
+        	 return mydata; 
+             }
+             
      }
      //Main
      public static void main(String[] args) throws IOException 

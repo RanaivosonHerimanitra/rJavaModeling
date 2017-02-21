@@ -25,6 +25,7 @@ public class Sites  {
 	private double rank;
 	CSVReader csv ;
 	ArrayList<String[]> mycsv ;
+	
 	// a constructor for the site
 	public  Sites (String path) throws IOException
 	{
@@ -35,6 +36,7 @@ public class Sites  {
 		mycsv = csv.readCSV();
 		rank=90;
 	}
+	
 	//
 	public void setSiteId(String str)
 	{
@@ -164,6 +166,10 @@ public class Sites  {
 			  return mycolumn;
 		  }
 	}
+	
+	/* renvoie la valeur du percentile 
+	 * correspondant à une période du jeu de données
+	 */
 	public double getPercentileValueAt(double rank,String siteId,String wk) throws IOException
 	{	
 		//System.out.println("searching for: " + wk);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/EWS"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/herimanitra/Chapter 3/jspDB/src/postgresql-jdbc.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/commons-csv-1.4/commons-csv-1.4.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/javacsv2.1/javacsv.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/commons-math3-3.6.1/commons-math3-3.6.1.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/commons-math3-3.6.1/commons-math3-3.6.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/commons-lang3-3.5/commons-lang3-3.5.jar"/>
+	<classpathentry kind="lib" path="/home/herimanitra/Téléchargements/commons-lang3-3.5/commons-lang3-3.5-javadoc.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
