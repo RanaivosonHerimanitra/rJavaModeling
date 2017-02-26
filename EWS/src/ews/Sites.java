@@ -30,8 +30,6 @@ public class Sites  {
 	public  Sites (String path) throws IOException
 	{
 		setFilePath(path);
-		//sitesList = new String [54];
-		//should read in database
 		csv = new CSVReader(filepathSite,",",true);
 		mycsv = csv.readCSV();
 		rank=90;

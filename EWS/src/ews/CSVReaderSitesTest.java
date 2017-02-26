@@ -1,29 +1,27 @@
 package ews;
 import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CSVReaderSitesTest {
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUp() throws Exception {
+		System.out.print("DEBUT DES TESTS");
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
+	
 
 	@Test
 	public void test() throws IOException {
 		
-		LinkedList<String> alertObserved  = new LinkedList<String>();
-		LinkedList<String> alertExpected  = new LinkedList<String>();
+		ArrayList<String> alertObserved  = new ArrayList<String>();
+		ArrayList<String> alertExpected  = new ArrayList<String>();
 				
 				
 		//what we expect:
@@ -71,10 +69,10 @@ public class CSVReaderSitesTest {
 		}
 		System.out.println("*********************************************");
 		
-		//expected vs actuals!
+		//expected vs actuals:	
 		for (int u=0; u<alertExpected.size(); u++)
-		{	
+		 {	
 			assertEquals(alertExpected.get(u) , alertObserved.get(u) );
-		}
+		 }
 	}
 }

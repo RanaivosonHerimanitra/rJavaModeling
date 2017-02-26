@@ -5,7 +5,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * The class <code>credentialsTest</code> contains tests for the class <code>{@link credentials}</code>.
+ * The class <code>credentialsTest</code> contains tests for the class <code>{@link Credentials}</code>.
  *
  * @generatedBy CodePro at 21/02/17 04:04
  * @author herimanitra
@@ -25,7 +25,7 @@ public class credentialsTest {
 		String user = "";
 		String pass = "";
 
-		credentials result = new credentials(user, pass);
+		Credentials result = new Credentials(user, pass);
 
 		// add additional test code here
 		assertNotNull(result);
@@ -41,7 +41,7 @@ public class credentialsTest {
 	@Test
 	public void testGetLoginForDB_1()
 		throws Exception {
-		credentials fixture = new credentials("", "");
+		Credentials fixture = new Credentials("", "");
 
 		Properties result = fixture.getLoginForDB();
 

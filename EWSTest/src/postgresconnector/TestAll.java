@@ -1,4 +1,4 @@
-package ews;
+package postgresconnector;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
@@ -9,14 +9,14 @@ import org.junit.runners.Suite;
  * of the tests within its package as well as within any subpackages of its
  * package.
  *
- * @generatedBy CodePro at 23/02/17 20:22
+ * @generatedBy CodePro at 26/02/17 22:45
  * @author herimanitra
  * @version $Revision: 1.0 $
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	CSVReaderTest.class,
-	DiseasesTest.class,
+	TableCreationTest.class,
+	credentialsTest.class,
 })
 public class TestAll {
 
@@ -25,7 +25,7 @@ public class TestAll {
 	 *
 	 * @param args the command line arguments
 	 *
-	 * @generatedBy CodePro at 23/02/17 20:22
+	 * @generatedBy CodePro at 26/02/17 22:45
 	 */
 	public static void main(String[] args) {
 		JUnitCore.runClasses(new Class[] { TestAll.class });
