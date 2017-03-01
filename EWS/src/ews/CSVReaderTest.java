@@ -28,7 +28,7 @@ public class CSVReaderTest {
 	 */
 	public void testNoHeader() throws Exception 
 	{
-			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest0.csv";
+			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest0.csv";
 			CSVReader csv= new CSVReader(csvFile,",",false);
 			
 		    ArrayList<String[]> mycsv= csv.readCSV();
@@ -57,7 +57,7 @@ public class CSVReaderTest {
 		String [] malFormedHeaders ={",","#","'",";","."};
 		for (int u=1; u<3; u++)
 		{
-			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest"+u+".csv";
+			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest"+u+".csv";
 			CSVReader csv= new CSVReader(csvFile,",",true);
 			//setUp( String.valueOf(u) );
 			ArrayList<String[]> mycsv= csv.readCSV();
@@ -82,7 +82,7 @@ public class CSVReaderTest {
 	@Test
 	public void testNoFichier () throws Exception
 	{
-		String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest5.csv";
+		String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest5.csv";
 		CSVReader csv= new CSVReader(csvFile,",",true);
 		//setUp("5");
 		assertTrue("Ne doit pas lire un fichier vide", csv.getEmpty()==false);

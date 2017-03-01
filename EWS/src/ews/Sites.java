@@ -7,6 +7,7 @@
 package ews;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import java.util.LinkedHashMap;
@@ -27,7 +28,7 @@ public class Sites  {
 	ArrayList<String[]> mycsv ;
 	
 	// a constructor for the site
-	public  Sites (String path) throws IOException
+	public  Sites (String path) throws IOException, SQLException
 	{
 		setFilePath(path);
 		csv = new CSVReader(filepathSite,",",true);
@@ -50,7 +51,7 @@ public class Sites  {
 	}
 	// methods:
 	// by default, return status for the current week :
-	public void getAlertStatusFor(String id, double rk) throws IOException
+	public void getAlertStatusFor(String id, double rk) throws IOException, SQLException
 	{
 	
 		setSiteId(id);
@@ -92,7 +93,7 @@ public class Sites  {
 		//return myalert;
 	}
 	//return index of a given week
-	public int searchIndex(String colname,String val) throws IOException
+	public int searchIndex(String colname,String val) throws IOException, SQLException
 	{
 		int myindex=-1;
 		String[] myweeks= (String[]) getVector(colname,false);
@@ -122,7 +123,7 @@ public class Sites  {
 	}
 	
 	//get double vector corresponding to a column name:
-	public Object getVector (String siteId,boolean convert) throws IOException
+	public Object getVector (String siteId,boolean convert) throws IOException, SQLException
 	{
 		CSVReader csv= new CSVReader(filepathSite,",",true);
    	    ArrayList<String[]> mycsv= csv.readCSV();
@@ -168,7 +169,7 @@ public class Sites  {
 	/* renvoie la valeur du percentile 
 	 * correspondant à une période du jeu de données
 	 */
-	public double getPercentileValueAt(double rank,String siteId,String wk) throws IOException
+	public double getPercentileValueAt(double rank,String siteId,String wk) throws IOException, SQLException
 	{	
 		//System.out.println("searching for: " + wk);
 		double[] myvector = (double[]) getVector(siteId,true);	

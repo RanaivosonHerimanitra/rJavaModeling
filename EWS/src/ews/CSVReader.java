@@ -6,12 +6,22 @@
  */
 package ews;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
+
+import postgresconnector.Credentials;
 
 public class CSVReader {
 	 static String csvFile = "";
@@ -22,20 +32,69 @@ public class CSVReader {
      private final ArrayList<String[]> mydata = new ArrayList<>();
      private int nrow;
      private boolean empty=false;
+    // private boolean db =false;
+     ResultSet rs;
      //constructor init main vars: complete path and sep
-     public CSVReader (String mycsvFile,String separator, boolean val)
+     public CSVReader (String mycsvFile,String separator, boolean val) throws SQLException, IOException
      {
-    	 csvFile=mycsvFile;
-    	 cvsSplitBy=separator;
-    	 hasHeader=val;
-    	 File f = new File(csvFile);
-    	 if( !f.exists() || (csvFile.equals("")) || (cvsSplitBy.equals("" )) ) { 
-    	     System.out.println("Le fichier n\'existe pas, les parametres ne doivent pas etre vides");
-    	     empty=true;
-    	     //System.exit(1);
-    	 }
+    	 String mycols = "";
+    	 //if user wants to retrieve from db:
+    	 if (val)
+    	 {
+    		 String selectTableSQL = "SELECT * from paluconf";
+    		 String uri ="jdbc:postgresql://localhost/ews";
+    		 Credentials creds =new Credentials("fred","secret");
+    		 Properties props = creds.getLoginForDB();
+    		 Connection conn = DriverManager.getConnection(uri, props);
+    		 Statement statement = conn.createStatement();
+    		 rs = statement.executeQuery(selectTableSQL); 
+    		 ResultSetMetaData rsmd = rs.getMetaData();
+    		 //prepare a buffered writer to receive data:
+	    	 BufferedWriter bw = new BufferedWriter(new FileWriter(new File(mycsvFile)));
+	    	 for (int k=2; k<=rsmd.getColumnCount() ;k++)
+	    	 {
+	    		 if (k!=rsmd.getColumnCount())
+	    		 {
+	    			 mycols +=rsmd.getColumnName(k) +",";
+	    		 } else {
+	    			 mycols +=rsmd.getColumnName(k) ;
+	    		 }
+	    	 }
+	    	bw.write(mycols);
+	        bw.newLine();
+	    	String lineDest="";
+    		while (rs.next()) 
+    		 {
+    			 for (int k=0; k<rsmd.getColumnCount()-1 ;k++)
+    	    	 {
+    	    		 if ( k!=(mycols.length()-1) )
+    	    		 {
+    	    			 
+    	    			 lineDest +=rs.getString( mycols.split(",")[k] ) +",";
+    	    		 } else {
+    	    			 lineDest +=rs.getString( mycols.split(",")[k] ) ;
+    	    		 }
+    	    	 }
+    			System.out.println(lineDest );
+ 	    		bw.write(lineDest);
+ 	    		bw.newLine();
+ 	    		lineDest="";
+ 			 }
+    		 bw.close();
+    	 } else {
+    		 csvFile=mycsvFile;
+        	 cvsSplitBy=separator;
+        	 hasHeader=val;
+        	 File f = new File(csvFile);
+        	 if( !f.exists() || (csvFile.equals("")) || (cvsSplitBy.equals("")) ) 
+        	 { 
+        	     System.out.println("Le fichier n\'existe pas, les parametres ne doivent pas etre vides");
+        	     empty=true;
+        	     //System.exit(1);
+        	 }
+    	 } 
      }
-     
+    
      //index to monitor if the file doesnt exist:
      public boolean getEmpty()
      {
@@ -126,7 +185,7 @@ public class CSVReader {
     	    catch( Exception e ) {
     	        return false;
     	    }
-    }
+     }
      //calculate mean of a convertible String array:
      public double meanOf ( String[] val )
      {
@@ -196,7 +255,6 @@ public class CSVReader {
              } else {
             	//count number of cols:
                  int col = getNumberCols();
-                 //System.out.println("Nbcol: "+col+" Nb line: "+n);
                  //if no header is said , prepare to generate one
                  int colVal=0;
                  String[] column = null;
@@ -245,8 +303,11 @@ public class CSVReader {
      
 	
 	//Main
-    public static void main(String[] args) throws IOException 
+    public static void main(String[] args) throws IOException, SQLException 
     {
+    	String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTestX.csv";
+    	CSVReader csv= new CSVReader(csvFile,",",true);
+	    ArrayList<String[]> mycsv= csv.readCSV();
     	
     }
 }

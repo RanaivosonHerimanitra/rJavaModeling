@@ -1,6 +1,7 @@
 package ews;
 import static org.junit.Assert.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class CSVReaderSitesTest {
 	
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, SQLException {
 		
 		ArrayList<String> alertObserved  = new ArrayList<String>();
 		ArrayList<String> alertExpected  = new ArrayList<String>();
