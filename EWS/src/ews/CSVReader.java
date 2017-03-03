@@ -84,16 +84,19 @@ public class CSVReader {
  			 }
     		 bw.close();
     	 } else {
-    		 csvFile=mycsvFile;
-        	 cvsSplitBy=separator;
-        	 this.hasHeader=hasHeader;
+    		 //csvFile=mycsvFile;
+        	 //cvsSplitBy=separator;
+        	 //this.hasHeader=hasHeader;
         	 File f = new File(csvFile);
         	 if( !f.exists() || (csvFile.equals("")) || (cvsSplitBy.equals("")) ) 
         	 { 
         	     System.out.println("Le fichier n\'existe pas, les parametres ne doivent pas etre vides");
         	     empty=true;
         	 }
-    	 } 
+    	 }
+    	 csvFile=mycsvFile;
+    	 cvsSplitBy=separator;
+    	 this.hasHeader=hasHeader;
      }
     
      //index to monitor if the file doesnt exist:
