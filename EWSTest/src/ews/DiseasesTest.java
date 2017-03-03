@@ -27,7 +27,7 @@ public class DiseasesTest {
 		fixture.addAlertStatus("");
 		fixture.addWeek("");
 		fixture.addNbCases(1.0);
-		fixture.mycsv = new CSVReader("", "", true);
+		fixture.mycsv = new CSVReader("", "", true,false);
 		fixture.addPastValues("");
 		String filepathOrigin = "";
 		String filepathDestination = "";

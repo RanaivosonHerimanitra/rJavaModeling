@@ -3,9 +3,8 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,10 +12,13 @@ public class CSVReaderSitesTest {
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		System.out.print("DEBUT DES TESTS");
+		System.out.println("DEBUT DES TESTS");
 	}
-
 	
+	@AfterClass
+	public static void setUp2() throws Exception {
+		System.out.println("FIN DES TESTS");
+	}
 
 	@Test
 	public void test() throws IOException, SQLException {
@@ -38,7 +40,7 @@ public class CSVReaderSitesTest {
 		 * Case 1, now add 03 consecutive values > rank=42 (90th percentile)
 		 * Expected: Alert!
 		 */
-		String path2="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest6case1.csv";
+		String path2="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest6case1.csv";
 		Sites mysite2 = new Sites(path2);
 		mysite2.getAlertStatusFor("mae", 90.);
 		Diseases disease = mysite2.getDiseases();
@@ -47,7 +49,7 @@ public class CSVReaderSitesTest {
 		ArrayList<Double> mae = disease.getNbCases();
 		for (int i=mae.size()-1; i>mae.size()-5 ; i--)
 		{
-			System.out.println("Semaine: "+ semaine.get(i) + " Nbcases: "+ mae.get(i) + ", 90th perc="+ mysite2.getPercentileValueAt(90,"mae",semaine.get(i)) + ", statut:"+ alerts.get(i) );
+			System.out.println("Semaine: "+ semaine.get(i) + " Nbcases: "+ mae.get(i-1) + ", 90th perc="+ mysite2.getPercentileValueAt(90,"mae",semaine.get(i)) + ", statut:"+ alerts.get(i) );
 			alertObserved.add(alerts.get(i) );
 		}
 		
@@ -56,7 +58,7 @@ public class CSVReaderSitesTest {
 		/*
 		 * Case 2, now add 03 consecutive values < rank = 42 (90th percentile)
 		*/
-		String path3="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/Sentinel/data/PaluConfTest6case2.csv";
+		String path3="/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest6case2.csv";
 		Sites mysite3 = new Sites(path3);
 		mysite3.getAlertStatusFor("mae", 90.);
 		Diseases disease3 = mysite3.getDiseases();
@@ -65,7 +67,7 @@ public class CSVReaderSitesTest {
 		ArrayList<Double> mae3 = disease3.getNbCases();
 		for (int i=mae3.size()-1 ; i>mae3.size()-5; i--)
 		{
-			System.out.println("Semaine: "+ semaine3.get(i) + " Nbcases: "+ mae3.get(i) + ", 90th perc="+ mysite3.getPercentileValueAt(90,"mae",semaine.get(i)) + ", statut:"+ alerts3.get(i) );
+			System.out.println("Semaine: "+ semaine3.get(i) + " Nbcases: "+ mae3.get(i-1) + ", 90th perc="+ mysite3.getPercentileValueAt(90,"mae",semaine.get(i)) + ", statut:"+ alerts3.get(i) );
 			alertObserved.add(alerts3.get(i) );		
 		}
 		System.out.println("*********************************************");

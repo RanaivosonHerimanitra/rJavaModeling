@@ -25,8 +25,9 @@ public class CSVReaderTest {
 		String mycsvFile = "";
 		String separator = "";
 		boolean val = true;
+		boolean remote = false;
 		boolean empty = false;
-		CSVReader result = new CSVReader(mycsvFile, separator, val);
+		CSVReader result = new CSVReader(mycsvFile, separator, val,remote);
 		empty= result.getEmpty();
 		assertTrue(empty==val);
 	}
@@ -40,7 +41,7 @@ public class CSVReaderTest {
 	@Test
 	public void testGetColumnValues_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		int index = 1;
@@ -58,7 +59,7 @@ public class CSVReaderTest {
 	@Test
 	public void testGetEmpty_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 
@@ -76,7 +77,7 @@ public class CSVReaderTest {
 	@Test
 	public void testGetNameOf_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		String[] val = new String[] {};
@@ -94,7 +95,7 @@ public class CSVReaderTest {
 	@Test
 	public void testGetNumberCols_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		int result = fixture.getNumberCols();
@@ -111,7 +112,7 @@ public class CSVReaderTest {
 	@Test
 	public void testGetNumberLines_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		int result = fixture.getNumberLines();
@@ -129,7 +130,7 @@ public class CSVReaderTest {
 	@Test
 	public void testHasHeader_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		boolean result = fixture.hasHeader();
@@ -147,7 +148,7 @@ public class CSVReaderTest {
 	@Test
 	public void testIsDouble_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		String input = "";
@@ -156,22 +157,7 @@ public class CSVReaderTest {
 	}
 
 	
-	/**
-	 * Run the void main(String[]) method test.
-	 *
-	 * @throws Exception
-	 *
-	 * @generatedBy CodePro at 20/02/17 22:29
-	 */
-	@Test
-	public void testMain_1()
-		throws Exception {
-		String[] args = new String[] {};
-
-		CSVReader.main(args);
-
-		// add additional test code here
-	}
+	
 
 	/**
 	 * Run the double meanOf(String[]) method test.
@@ -183,7 +169,7 @@ public class CSVReaderTest {
 	@Test
 	public void testMeanOf_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		String[] val = new String[] {null, ""};
@@ -203,7 +189,7 @@ public class CSVReaderTest {
 	@Test
 	public void testReadCSV_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		ArrayList<String[]> result = fixture.readCSV();
@@ -220,7 +206,7 @@ public class CSVReaderTest {
 	@Test
 	public void testSetColumnName_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		int index = 1;
@@ -239,7 +225,7 @@ public class CSVReaderTest {
 	@Test
 	public void testSetNumberLines_1()
 		throws Exception {
-		CSVReader fixture = new CSVReader("", "", true);
+		CSVReader fixture = new CSVReader("", "", true,false);
 		fixture.setNumberLines(1);
 		fixture.line = "";
 		int myrow = 1;

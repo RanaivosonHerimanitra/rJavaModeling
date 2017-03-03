@@ -1,6 +1,5 @@
 /*
  * A disease has an evolution of cases number for a given geographical site.
- * TODO: refactor every arrays (single) to a LinkList ou Vector??: 
  * http://beginnersbook.com/2013/12/linkedlist-in-java-with-example/
  */
 
@@ -31,7 +30,7 @@ public class Sites  {
 	public  Sites (String path) throws IOException, SQLException
 	{
 		setFilePath(path);
-		csv = new CSVReader(filepathSite,",",true);
+		csv = new CSVReader(filepathSite,",",true,false);
 		mycsv = csv.readCSV();
 		rank=90;
 	}
@@ -75,6 +74,7 @@ public class Sites  {
 				myalert[i]="alert";
 				//System.out.println(myweek[i]+" est en alerte car "+ myvector[i-1] +","+myvector[i-2]+","+myvector[i-3]+" ont depasse le 90th perc:"+valueAtPercRank);
 				disease.addAlertStatus("alert");
+				//past 03 values:
 				disease.addPastValues(myvector[i-1] +"-"+myvector[i-2]+"-"+myvector[i-3]);
 				disease.addSites(siteId);
 				disease.addWeek(myweek[i]);
@@ -82,6 +82,7 @@ public class Sites  {
 			} else {
 				myalert[i]="normal";
 				disease.addAlertStatus("normal");
+				//revoir ici car redondance
 				disease.addPastValues(myvector[i-1] +"-"+myvector[i-2]+"-"+myvector[i-3]);
 				disease.addSites(siteId);
 				disease.addWeek(myweek[i]);
@@ -125,13 +126,13 @@ public class Sites  {
 	//get double vector corresponding to a column name:
 	public Object getVector (String siteId,boolean convert) throws IOException, SQLException
 	{
-		CSVReader csv= new CSVReader(filepathSite,",",true);
+		CSVReader csv= new CSVReader(filepathSite,",",true,false);
    	    ArrayList<String[]> mycsv= csv.readCSV();
 		//loop thru all index and search for siteId:
-				String [] mycolumn = mycsv.get(0);
-		   	    String colName = csv.getNameOf(mycolumn);
-		   	    //System.out.println("you re getting col: "+colName);
-		   	    double[] myvector = new double[mycolumn.length-1];
+	    String [] mycolumn = mycsv.get(0);
+		String colName = csv.getNameOf(mycolumn);
+		
+		double[] myvector = new double[mycolumn.length-1];
 		   	    if ( !colName.equals(siteId) )
 		   	    {
 		   	    	for (int index=1; index<mycsv.size();index++)
@@ -174,12 +175,15 @@ public class Sites  {
 		//System.out.println("searching for: " + wk);
 		double[] myvector = (double[]) getVector(siteId,true);	
 		String[] myweek = (String[]) getVector("code",false);
-		
+		//for (int k=0;k<myvector.length;k++)
+		//{
+		//	System.out.println(siteId + "= " + myvector[k] );
+		//}
 		//get index of the supplied code week:
 		int index_wk=-1;
 		for ( int k=0; k<myweek.length;k++)
 		{
-			//System.out.println("myweek[k]="+myweek[k]);
+			//System.out.println("myweek[k]="+ myweek[k]+ ", wk="+ wk);
 			if ( myweek[k].equals(wk) )
 			{
 				index_wk=k;
@@ -191,14 +195,10 @@ public class Sites  {
 		double[]  myvector_sliced = new double[myweek.length - index_wk +1] ;
 		for (int k=index_wk;k<myweek.length-1;k++)
 		{
-			//System.out.println("k: " + k + ",myweeklength-1: " +(myweek.length-1 ));
 			myvector_sliced[u] = myvector[k];
 			u++;
 		}
 		double percentile = new Percentile().evaluate(myvector_sliced, rank);
-		//EmpiricalDistribution distribution = new EmpiricalDistribution(myvector.length);
-	    // distribution.load(myvector);
-	    //double percentile = distribution.cumulativeProbability(4);
 	    return percentile;
 	}
 	//return static about a given disease

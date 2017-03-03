@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Diseases {
@@ -19,6 +20,7 @@ public class Diseases {
 	private ArrayList<String> alertWeek= new ArrayList<>();
 	private ArrayList<Double> nbCases= new ArrayList<>();
 	private boolean isAppended = false;
+	
 	CSVReader mycsv ;
     public Diseases ()
     {
@@ -30,31 +32,33 @@ public class Diseases {
     	return isAppended;
     }
     //
-    public void addNewSite(String origin, String dest, String newFile) throws IOException {
-    	if (origin.equals("") || dest.equals("") || newFile.equals("") )
-    	{
-    		isAppended=false;
-    	} else {
-    		BufferedReader br = new BufferedReader(new FileReader(new File(origin)));
-    		BufferedReader br1 = new BufferedReader(new FileReader(new File(dest)));
-    		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(newFile)));
-    		String lineOrg;
-    		String lineDest;
-    		while((lineOrg = br.readLine()) != null && (lineDest =br1.readLine())!=null  ) {
-    			 System.out.println("AVANT: " + lineDest);
-    			 if ( lineOrg.split(",").length==3)
-    			 {
-    				 lineDest = lineDest + "," + lineOrg.split(",")[2] ; 
-    			 } else {
-    				 lineDest = lineDest + "," + " " ; 
-    			 }
-    			 System.out.println("APRES: " + lineDest);
-    			 bw.write(lineDest);
-    			 bw.newLine();
-    		}
-    		isAppended=true;
-    		bw.close();br.close();br1.close();
-    	}
+    public void addNewSite(String origin, String dest, String newFile) throws IOException, SQLException {
+ 
+    	   if (origin.equals("") || dest.equals("") || newFile.equals("") )
+    	    	{
+    	    		isAppended=false;
+    	    	} else 
+    	    	{
+    	    		BufferedReader br = new BufferedReader(new FileReader(new File(origin)));
+    	    		BufferedReader br1 = new BufferedReader(new FileReader(new File(dest)));
+    	    		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(newFile)));
+    	    		String lineOrg;
+    	    		String lineDest;
+    	    		while((lineOrg = br.readLine()) != null && (lineDest =br1.readLine())!=null  )         {
+    	    			 System.out.println("AVANT: " + lineDest);
+    	    			 if ( lineOrg.split(",").length==3)
+    	    			 {
+    	    				 lineDest = lineDest + "," + lineOrg.split(",")[2] ; 
+    	    			 } else {
+    	    				 lineDest = lineDest + "," + " " ; 
+    	    			 }
+    	    			 System.out.println("APRES: " + lineDest);
+    	    			 bw.write(lineDest);
+    	    			 bw.newLine();
+    	    		}
+    	    		isAppended=true;
+    	    		bw.close();br.close();br1.close();
+    	    	} 		
 	}
     //
     public void addNbCases(double val)

@@ -29,7 +29,7 @@ public class CSVReaderTest {
 	public void testNoHeader() throws Exception 
 	{
 			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest0.csv";
-			CSVReader csv= new CSVReader(csvFile,",",false);
+			CSVReader csv= new CSVReader(csvFile,",",false,false);
 			
 		    ArrayList<String[]> mycsv= csv.readCSV();
 			int ncol = csv.getNumberCols();
@@ -58,7 +58,7 @@ public class CSVReaderTest {
 		for (int u=1; u<3; u++)
 		{
 			String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest"+u+".csv";
-			CSVReader csv= new CSVReader(csvFile,",",true);
+			CSVReader csv= new CSVReader(csvFile,",",false,false);
 			//setUp( String.valueOf(u) );
 			ArrayList<String[]> mycsv= csv.readCSV();
 			int Ncol = csv.getNumberCols();
@@ -83,7 +83,7 @@ public class CSVReaderTest {
 	public void testNoFichier () throws Exception
 	{
 		String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTest5.csv";
-		CSVReader csv= new CSVReader(csvFile,",",true);
+		CSVReader csv= new CSVReader(csvFile,",",true,false);
 		//setUp("5");
 		assertTrue("Ne doit pas lire un fichier vide", csv.getEmpty()==false);
 	}

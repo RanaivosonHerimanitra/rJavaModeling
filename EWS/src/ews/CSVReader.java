@@ -32,15 +32,17 @@ public class CSVReader {
      private final ArrayList<String[]> mydata = new ArrayList<>();
      private int nrow;
      private boolean empty=false;
-    // private boolean db =false;
      ResultSet rs;
+     
+     
      //constructor init main vars: complete path and sep
-     public CSVReader (String mycsvFile,String separator, boolean val) throws SQLException, IOException
+     public CSVReader (String mycsvFile,String separator, boolean hasHeader,boolean remote) throws SQLException, IOException
      {
     	 String mycols = "";
     	 //if user wants to retrieve from db:
-    	 if (val)
+    	 if (remote && !mycsvFile.equals("") && !separator.equals(""))
     	 {
+    		 System.out.println("CONNECTION DB!");
     		 String selectTableSQL = "SELECT * from paluconf";
     		 String uri ="jdbc:postgresql://localhost/ews";
     		 Credentials creds =new Credentials("fred","secret");
@@ -49,7 +51,7 @@ public class CSVReader {
     		 Statement statement = conn.createStatement();
     		 rs = statement.executeQuery(selectTableSQL); 
     		 ResultSetMetaData rsmd = rs.getMetaData();
-    		 //prepare a buffered writer to receive data:
+    		 //prepare a buffered writer to receive data and save it:
 	    	 BufferedWriter bw = new BufferedWriter(new FileWriter(new File(mycsvFile)));
 	    	 for (int k=2; k<=rsmd.getColumnCount() ;k++)
 	    	 {
@@ -84,13 +86,12 @@ public class CSVReader {
     	 } else {
     		 csvFile=mycsvFile;
         	 cvsSplitBy=separator;
-        	 hasHeader=val;
+        	 this.hasHeader=hasHeader;
         	 File f = new File(csvFile);
         	 if( !f.exists() || (csvFile.equals("")) || (cvsSplitBy.equals("")) ) 
         	 { 
         	     System.out.println("Le fichier n\'existe pas, les parametres ne doivent pas etre vides");
         	     empty=true;
-        	     //System.exit(1);
         	 }
     	 } 
      }
@@ -302,12 +303,5 @@ public class CSVReader {
      }
      
 	
-	//Main
-    public static void main(String[] args) throws IOException, SQLException 
-    {
-    	String csvFile = "/media/herimanitra/DONNEES/IPM_sentinelle/sentinel_hrmntr 291115/data-ground-thruth/PaluConfTestX.csv";
-    	CSVReader csv= new CSVReader(csvFile,",",true);
-	    ArrayList<String[]> mycsv= csv.readCSV();
-    	
-    }
+	
 }
